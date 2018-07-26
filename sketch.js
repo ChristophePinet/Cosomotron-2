@@ -9,9 +9,17 @@ var value = 0
 var secondesCR = 5
 var listimage = ["Medias/a.jpg", "Medias/b.jpg", "Medias/c.jpg", "Medias/d.jpg", "Medias/e.png"]
 var positionlist = 0
-var resolution = 1 / 2
-var toilevisible = true;
-var taille = []
+var resolution = 1 / 2 // Pour réduire la résolution
+var toilevisible = true; // Afficher ou non la fonction etoile
+var taille = [] // Tableau de différente taille
+var etoileX = []
+var etoileY = []
+var r1 = 300;
+var c = 0.628319;
+var rotation = 0;
+var imagedefond;
+var y = 0
+
 
 function setup() {
     canvas = createCanvas(); // Creer une zone pour dessiner
@@ -24,19 +32,21 @@ function setup() {
     camera.hide(); // Supprimer la webcam de base
     frameRate(60); // Changer le framerate (Image par seconde)
     //Imagedefond.loop()
-    
-    for (var i = 0; i < 10; i++) {
-        etoileY[i] = random(0, 1000)
-        taille[i] = random(0.1, 0.5);
+
+    for (var i = 0; i < 30; i++) { // Créer 10 étoile
+        etoileX[i] = random(0, 100)
+        etoileY[i] = random(10, 800) // Distance entre les étoiles
+        taille[i] = random(0.1, 0.5); // Différente taille des étoiles
+        
         // etoileX[i]= i * 100;
 
     }
-    setupbutton()
+    setupbutton() // Lance la fonction nommée
 
 
-    windowResized()
+    windowResized() // Lance la fonction nommée
 
-    positionbutton()
+    positionbutton() // Lance la fonction nommée
 }
 
 
@@ -44,33 +54,37 @@ function setup() {
 
 function draw() { // Dessine chaque image
     drawbutton()
-    //background(0) // Dessiner le fond
+    // background(0) // Dessiner le fond
     image(Imagedefond, 0, 0, largeur * resolution, hauteur * resolution) // Dessine l'image / La video
     loadPixels(); // Charge les pixel
     dessinerCamera() // Dessine la webcam
     updatePixels(); // Permet de charger les pixel en mouvement.
-    etoile();
-    if (toilevisible == true) {
-        
-        for (var i = 0; i < 10; i++) {
-            //etoile(etoileX[i],0);
-            etoile(random(0) + 150 * i, etoileY[i], taille[i]);
-            etoileY[i] += 10
-            
-            if (etoileY[i] >= 1000) {
-                etoileY[i] = random(-150 - 100)
+    etoile(); // Lance la fonction nommée
+    if (toilevisible == true) { // Si toilevisible est vrai, alors on lance la fonction en dessous.
 
+        for (var i = 0; i < 30; i++) { // Dessine les étoiles
+            //etoile(etoileX[i],0);
+            etoile(etoileX[i], etoileY[i], taille[i]); // Indique leurs positions et leurs tailles
+
+            etoileY[i] += 5 // Vitesse de déplacement
+            etoileX[i] += 5
+
+            if (etoileY[i] >= 500) { // Si l'étoile descend tout en bas...
+                etoileY[i] = random(-500, 400) // Alors elle retourne en haut
+                etoileX[i] = random(0)
             }
         }
+     
+
     }
 }
 
 function move() {
-    localStorage.setItem("ValeurSlider", "" + seuil)
+    localStorage.setItem("ValeurSlider", "" + seuil) // Enregistre
 
 }
 
-function windowResized() {
+function windowResized() { // Responsive de l'écran. Si il change de taille, le programme s'adapte
     largeur = windowWidth
     hauteur = windowHeight
     canvas.size(largeur * resolution, hauteur * resolution)
@@ -100,7 +114,7 @@ function chargerimg() {
 
 
 function distance(r1, g1, b1, r2, g2, b2) { // Calcul la distance entre deux couleurs
-    return (Math.abs(r2 - r1) + Math.abs(g2 - g1) + Math.abs(b2 - b1)) / 4
+    return (Math.abs(r2 - r1) + Math.abs(g2 - g1) + Math.abs(b2 - b1))/4
 }
 
 
@@ -115,16 +129,19 @@ function dessinerCamera() { // affiche la webcam
 
     if (camera.pixels.length) { // Etre sur que la caméra est chargée
 
-        const w = largeur * resolution; // Variable raccourcis pour largeur
-        const h = hauteur * resolution; // Variable raccourcis pour hauteur
+        const w = largeur; // Variable raccourcis pour largeur
+        const h = hauteur; // Variable raccourcis pour hauteur
 
         //for (let i = 0; i < w; i++) { // On se balade sur les colonnes
         //for (let j = 0; j < h; j++) { // On se balade sur les lignes
 
-        // var position1dCanvas = (j*w + i)*4; 
-
-        for (let position1dCanvas = 0; position1dCanvas < camera.pixels.length; position1dCanvas++) {
-
+          
+        for(let i = 0; i < w; i++){
+            
+        for (let j = 0; j < h; j++){
+            
+            const position1dCanvas=(j*w+i)*4
+            
             const r = camera.pixels[position1dCanvas + 0];
             const g = camera.pixels[position1dCanvas + 1];
             const b = camera.pixels[position1dCanvas + 2];
@@ -139,7 +156,6 @@ function dessinerCamera() { // affiche la webcam
             }
         }
     }
-
-
-    updatePixels();
+}
+    updatePixels()
 }
