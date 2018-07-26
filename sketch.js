@@ -34,8 +34,8 @@ function setup() {
     //Imagedefond.loop()
 
     for (var i = 0; i < 30; i++) { // Créer 10 étoile
-        etoileX[i] = random(0, 100)
-        etoileY[i] = random(10, 800) // Distance entre les étoiles
+        etoileX[i] = random(0, largeur)
+        etoileY[i] = random(10, hauteur) // Distance entre les étoiles
         taille[i] = random(0.1, 0.5); // Différente taille des étoiles
         
         // etoileX[i]= i * 100;
@@ -66,12 +66,12 @@ function draw() { // Dessine chaque image
             //etoile(etoileX[i],0);
             etoile(etoileX[i], etoileY[i], taille[i]); // Indique leurs positions et leurs tailles
 
-            etoileY[i] += 5 // Vitesse de déplacement
-            etoileX[i] += 5
+            etoileY[i] += 10 // Vitesse de déplacement
+            etoileX[i] += 10
 
-            if (etoileY[i] >= 500) { // Si l'étoile descend tout en bas...
+            if (etoileY[i] >= 700) { // Si l'étoile descend tout en bas...
                 etoileY[i] = random(-500, 400) // Alors elle retourne en haut
-                etoileX[i] = random(0)
+                etoileX[i] = random(-100,500)
             }
         }
      
